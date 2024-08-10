@@ -75,21 +75,21 @@ class Exporter {
         continue;
       }
       decodedImage.frameDuration = frame.durationInMillis;
-      mainImage.frames.add(
-        _encodeGifWIthTransparency(
-          image.copyExpandCanvas(
-            decodedImage,
-            newWidth: width,
-            newHeight: height,
-            toImage: image.Image(
-              width: width,
-              height: height,
-              format: decodedImage.format,
-              numChannels: 4,
-            ),
+      final tmpImg = _encodeGifWIthTransparency(
+        image.copyExpandCanvas(
+          decodedImage,
+          newWidth: width,
+          newHeight: height,
+          toImage: image.Image(
+            width: width,
+            height: height,
+            format: decodedImage.format,
+            numChannels: 4,
           ),
         ),
       );
+      tmpImg.frameDuration = frame.durationInMillis;
+      mainImage.frames.add(tmpImg);
     }
 
     return image.encodeGif(mainImage);
@@ -106,7 +106,8 @@ class Exporter {
 
   static image.Image _encodeGifWIthTransparency(image.Image srcImage,
       {int transparencyThreshold = 1}) {
-    final newImage = image.quantize(srcImage);
+    final newImage =
+        image.quantize(srcImage, method: image.QuantizeMethod.octree);
 
     // GifEncoder will use palette colors with a 0 alpha as transparent. Look at the pixels
     // of the original image and set the alpha of the palette color to 0 if the pixel is below
