@@ -35,7 +35,7 @@ class ScreenRecorderController {
   /// For example if it's `skipFramesBetweenCaptures = 2` screen_recorder
   /// captures a frame, skips the next two frames and then captures the next
   /// frame again.
-  final int skipFramesBetweenCaptures;
+  int skipFramesBetweenCaptures;
 
   int skipped = 0;
 
@@ -84,8 +84,7 @@ class ScreenRecorderController {
   }
 
   ui.Image? capture() {
-    final renderObject = _containerKey.currentContext!.findRenderObject()
-        as RenderRepaintBoundary;
+    final renderObject = _containerKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
 
     return renderObject.toImageSync(pixelRatio: pixelRatio);
   }
